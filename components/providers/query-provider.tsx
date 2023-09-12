@@ -6,7 +6,7 @@ import {
 } from "@tanstack/react-query";
 import { useState } from "react"; 
 
-export const QueryProdiver = ({
+export const QueryProvider = ({
     children
 }: { 
     children: React.ReactNode;
