@@ -1,5 +1,9 @@
 import { NavigationSidebar } from "@/components/navigation/navigation-sidebar";
 
+
+
+// This is what controls the redirect when the user has more than 1 server and deletes
+// a server 
 const MainLayout = async ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="h-full">

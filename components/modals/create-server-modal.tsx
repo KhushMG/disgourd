@@ -3,7 +3,6 @@
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useEffect, useState } from "react";
 
 import {
   Dialog,
@@ -27,6 +26,7 @@ import { FileUpload } from "@/components/file-upload";
 
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { useModal } from "@/hooks/use-modal-store";
 
 const formSchema = z.object({
   name: z.string().min(1, {
@@ -37,45 +37,41 @@ const formSchema = z.object({
   }),
 });
 
-export const InitialModal = () => {
-    const [isMounted, setIsMounted] = useState(false);
+export const CreateServerModal = () => {
+  const { isOpen, onClose, type } = useModal();
 
-    const router = useRouter(); 
-    
-    useEffect(() => { 
-        setIsMounted(true);
-    }, []);
-    
-    const form = useForm({
-        resolver: zodResolver(formSchema),
-        defaultValues: {
-            name: "",
-            imageUrl: "",
-        },
-    });
+  const router = useRouter();
+
+  const isModalOpen = isOpen && type === "createServer"
+
+  const form = useForm({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: "",
+      imageUrl: "",
+    },
+  });
 
   const isLoading = form.formState.isSubmitting;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    try { 
+    try {
       await axios.post("/api/servers", values);
-      form.reset(); 
-      router.refresh(); 
-      window.location.reload(); 
-
-    } catch (error) { 
+      form.reset();
+      onClose(); 
+      router.refresh();
+    } catch (error) {
       console.log(error);
     }
   };
 
-
-  if (!isMounted) { 
-    return null; 
+  const handleClose = () => { 
+    form.reset(); 
+    onClose(); 
   }
 
-
   return (
-    <Dialog open>
+    <Dialog open={isModalOpen} onOpenChange={handleClose}>
       <DialogContent
         className="bg-white text-black p-0
             overflow-hidden"
@@ -86,7 +82,7 @@ export const InitialModal = () => {
           </DialogTitle>
           <DialogDescription className="text-center text-zinc-500">
             Give your server a personality with a name and and image. You can
-            always change it later.
+            always change it later
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -96,18 +92,18 @@ export const InitialModal = () => {
                 <FormField
                   control={form.control}
                   name="imageUrl"
-                  render= {({ field }) => (
+                  render={({ field }) => (
                     <FormItem>
                       <FormControl>
-                        <FileUpload 
+                        <FileUpload
                           endpoint="serverImage"
                           value={field.value}
                           onChange={field.onChange}
-                        /> 
+                        />
                       </FormControl>
                     </FormItem>
-                  )} 
-                /> 
+                  )}
+                />
               </div>
               <FormField
                 control={form.control}

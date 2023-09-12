@@ -8,6 +8,9 @@ import { db}  from "@/lib/db";
 import { NavigationAction } from "./navigation-action";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { NavigationItem } from "./navigation-item";
+import ModeToggle from "../mode-toggle";
+import { UserButton } from "@clerk/nextjs";
 
 export const NavigationSidebar = async() => { 
 
@@ -28,10 +31,9 @@ export const NavigationSidebar = async() => {
         }
     });
 
-
     return(
         <div className="space-y-4 flex flex-col items-center h-full text-primary
-        w-full dark: bg-[#1E1F22] py-3">
+        w-full dark:bg-[#1E1F22] bg-[#bec1c4] py-3">
             <NavigationAction/>
 
             <Separator
@@ -40,12 +42,28 @@ export const NavigationSidebar = async() => {
             /> 
 
             <ScrollArea className="flex-1 w-full"> 
-                {servers.map((server) => 
-                    <div>
-                        {server.name}
+                {servers.map((server) => ( 
+                    <div key={server.id} className="mb-4">
+                        <NavigationItem
+                            id={server.id}
+                            name={server.name}
+                            imageUrl={server.imageUrl}
+                        />
                     </div>
-                )}
+                ))}
             </ScrollArea> 
+
+            <div className="pb-3 mt-auto flex items-center flex-col gap-y-4">
+                <ModeToggle/>  
+                <UserButton
+                    afterSignOutUrl="/"
+                    appearance={{ 
+                        elements: { 
+                            avatarBox: "h-[48px] w-[48px]"
+                        }
+                    }}
+                />
+            </div>
         </div>
     )
 }
