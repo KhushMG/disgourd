@@ -1,7 +1,5 @@
 import { NavigationSidebar } from "@/components/navigation/navigation-sidebar";
 
-
-
 // This is what controls the redirect when the user has more than 1 server and deletes
 // a server 
 const MainLayout = async ({ children }: { children: React.ReactNode }) => {
@@ -11,7 +9,7 @@ const MainLayout = async ({ children }: { children: React.ReactNode }) => {
         className="hidden md:flex h-full w-[72px]
             z-30 flex-col fixed inset-y-0"
         >
-
+        
         <NavigationSidebar/>
 
         </div>
