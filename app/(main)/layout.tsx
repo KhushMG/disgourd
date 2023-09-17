@@ -7,6 +7,7 @@ import RootLayout from "../layout";
 
 const MainLayout = async ({ children }: { children: React.ReactNode }) => {
   return (
+    
     <div className="h-full">
       <div
         className="md:flex h-full w-[72px]
